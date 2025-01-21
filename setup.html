@@ -17,9 +17,9 @@
             --color-primary: #666666;
             --color-secondary-rgba: 234, 182, 56;
             --color-secondary: #eab638;
-            --esp-tools-button-color: #00A651;
-            --esp-tools-button-text-color: #101010;
-            --improv-primary-color: #484;
+            --esp-tools-button-color: #ff3d3d;
+            --esp-tools-button-text-color: #ffffff;
+            --improv-primary-color: rgb(188, 11, 11);
         }
         ewt-no-port-picked-dialog{
             z-index: 10;
@@ -161,17 +161,17 @@
     </style>
 </head>
 <body>
-    <canvas id="particleCanvas" style="background: rgb(20,80,49);"></canvas>
+    <canvas id="particleCanvas" style="background: rgb(182, 63, 63);"></canvas>
     <div id="cubecontainer" class="cube-container">
-        <img src="BLLED.png" alt="BLLED Logo">
+        <img src="Universal.png" alt="BLLED Logo">
         <div style="padding: 16px">Configuration</div>
         <button id="connectbutton">Connect</button>
     </div>
 
     <div id = "BLLEDForm" class='BLLEDform-container'>
-        <h1>BLLEDController WIFI Setup Page</h1>
+        <h1>BL WIFI Setup Page</h1>
         <p>
-            This page allows you to set up your BLLEDController's WIFI By entering your WIFI details.
+            This page allows you to set up your BL Product's WIFI By entering your WIFI details.
         </p>   
         <label for="ssid">SSID:</label>
         <input type="text" id="ssid" placeholder="Enter SSID"><br>
@@ -185,7 +185,7 @@
         <label for='code'>Printer Access Code:</label>
         <input type='text' id='code' title='Enter the access code for your MQTT broker' placeholder="Enter Printer Access Code"><br>
 
-        <label for='id'>Printer Serial ID:</label>
+        <label for='id'>Printer Serial Number:</label>
         <input type='text' id='id' title='Enter the serial ID for your device' placeholder="Enter Printer Serial ID"><br>
     
         <button id="sendButton">Send Configuration</button>
@@ -239,8 +239,8 @@
                         if (accumulatedData.includes("IP_ADDRESS:")) {
                             const startIndex = accumulatedData.indexOf("IP_ADDRESS:") + "IP_ADDRESS:".length;
                             const ipAddress = accumulatedData.substring(startIndex).trim();
-                            document.getElementById("status").innerHTML = `Successfully connected to wifi. <span style="color:MediumSeaGreen;"><B>Head over to the <A HREF="http://${ipAddress}/" style="color:MediumSeaGreen;>BLLED Conntroller Setup Page</A> to customise your settings</B></span><BR>`;
-                            document.getElementById("status").innerHTML += `BLLED Controller Setup page address: <A HREF="http://${ipAddress}/">http://${ipAddress}/</A>`;
+                            document.getElementById("status").innerHTML = `Successfully connected to wifi. <span style="color:MediumSeaGreen;"><B>Head over to the <A HREF="http://${ipAddress}/" style="color:MediumSeaGreen;>Setup Page</A> to customise your settings</B></span><BR>`;
+                            document.getElementById("status").innerHTML += `Setup page address: <A HREF="http://${ipAddress}/">http://${ipAddress}/</A>`;
                             accumulatedData = '';
                             break;
                         }else{
