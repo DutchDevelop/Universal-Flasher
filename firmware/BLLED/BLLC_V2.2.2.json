@@ -1,0 +1,15 @@
+{
+  "name": "BLLC_V2.2.2",
+  "version": "2.2.2",
+  "builds": [
+    {
+      "chipFamily": "ESP32",
+      "parts": [
+        {
+          "path": "BLLC_V2.2.2.bin",
+          "offset": 0
+        }
+      ]
+    }
+  ]
+}
