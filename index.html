@@ -1,444 +1,441 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>BLLED Setup</title>
-    <style>
-        :root {
-            /*orig*/
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BLLED Setup</title>
+  <style>
+    :root {
+      --color-black: black;
+      --color-white: white;
+      --color-primary: #666666;
+      --esp-tools-button-color: #2469ff;
+      --esp-tools-button-text-color: #ffffff;
+    }
 
-            --color-black: black;
-            --color-cod-gray: #101010;
-            --color-white: white;
-            --color-error: rgb(191, 95, 95);
-            --color-primary-rgba: 0, 192, 251;
-            --color-primary: #666666;
-            --color-secondary-rgba: 234, 182, 56;
-            --color-secondary: #eab638;
-            --esp-tools-button-color: #ff3d3d;
-            --esp-tools-button-text-color: #ffffff;
-            --improv-primary-color: rgb(188, 11, 11);
-        }
-        ewt-no-port-picked-dialog{
-            z-index: 10;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: var(--color-black);
+      font-family: Arial, sans-serif;
+      overflow: hidden;
+    }
+
+    .cube-container {
+      position: relative;
+      width: 360px;
+      padding: 20px;
+      background-color: var(--color-white);
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+      z-index: 10;
+      text-align: center;
+    }
+
+    .cube-container img.logo {
+      width: 100px;
+      height: auto;
+      margin-bottom: 10px;
+    }
+
+    .cube-container h1 {
+      font-size: 22px;
+      color: var(--color-black);
+      margin-bottom: 5px;
+    }
+
+    .cube-container p.subtext {
+      font-size: 14px;
+      color: var(--color-primary);
+      margin-bottom: 20px;
+    }
+
+    .button-row {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 10px;
+    }
+
+    .printer-button {
+      flex: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .printer-button img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+
+    .printer-button span {
+      margin-top: 8px;
+      font-size: 16px;
+      color: var(--color-black);
+    }
+
+    canvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .printer-button {
+        flex: 1;
+        background-color: #f0f0f0;
+        border: none;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+        transition: background-color 0.3s;
+    }
+
+    .printer-button:hover {
+        background-color: #e0e0e0;
+    }
+   .platform-items button:hover {
+        background-color: #bbb;
+    }
+
+    .platform-items {
+        position: relative;
+        width: 360px;
+        padding: 20px;
+        background-color: var(--color-white);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        z-index: 10;
+        text-align: center;
+    }
+
+    .platform-items .items-row {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .platform-items .item {
+        flex: 1;
+        background-color: #f0f0f0;
+        padding: 10px;
+        border-radius: 10px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: background-color 0.3s;
+    }
+
+    .platform-items .item:hover {
+     background-color: #e0e0e0;
+    }
+
+    .platform-items img {
+        width: 80px;
+        border-radius: 10px;
+    }
+
+    .platform-items span {
+        color: black;
+        margin-top: 5px;
+    }
+
+    .firmware-container {
+        position: relative;
+        width: 360px;
+        padding: 20px;
+        background-color: var(--color-white);
+        border-radius: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+        z-index: 10;
+        text-align: center;
         }
 
-        ewt-install-dialog{
-            z-index: 10;
-        }
+    .firmware-container img {
+        width: 100px;
+        border-radius: 10px;
+        margin-bottom: 15px;
+    }
 
-        esp-web-install-button :host {
-            --mdc-theme-primary: #a60000;
-        }
 
-        ewt-install-dialog:host {
-            --mdc-theme-primary: #a60000;
-        }
+    .firmware-container label {
+      display: block;
+      font-weight: bold;
+      margin-top: 15px;
+      margin-bottom: 5px;
+    }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: var(--color-black);
-            overflow: hidden;
-            font-family: Arial, sans-serif;
-        }
-
-        .cube-container {
-            position: relative;
-            width: 300px;
-            padding: 20px;
-            background-color: var(--color-white);
-            border-radius: 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            z-index: 10;
-        }
-
-        .cube-container img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 10px;
-        }
-
-        .cube-container p {
-            font-size: 20px;
-            color: var(--color-black);
-            margin-top: 15px;
-        }
-
-        .BLLEDform-container {
-            display: none;
-            position: relative;
-            width: 500px;
-            padding: 20px;
-            background-color: var(--color-white);
-            border-radius: 20px;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
-            z-index: 10;
-            transition: all 0.5s ease;
-        }
-
-        .BLLEDform-container h1 {
-            font-size: 22px;
-            color: var(--color-black);
-            margin-bottom: 10px;
-        }
-
-        .BLLEDform-container p {
-            font-size: 14px;
-            color: var(--color-primary);
-            text-align: center;
-            margin-bottom: 20px;
-        }
-
-        .BLLEDform-container input {
-            width: 100%;
-            padding: 8px;
-            margin: 10px 0;
-            border: 1px solid var(--color-primary);
-            border-radius: 5px;
-        }
-
-        .BLLEDform-container button {
-            padding: 10px 20px;
-            background-color: var(--esp-tools-button-color);
-            color: var(--esp-tools-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        .BLLEDform-container button:hover {
-            background-color: var(--color-primary);
-        }
-
-        #logContainer {
-            width: 100%;
-            margin-top: 20px;
-            border: 1px solid #ccc;
-            padding: 10px;
-            max-height: 200px;
-            overflow-y: auto;
-            font-size: 12px;
-            /* display: none; */
-        }
-
-        #connectbutton {
-            padding: 10px 20px;
-            background-color: var(--esp-tools-button-color);
-            color: var(--esp-tools-button-text-color);
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            margin-top: 10px;
-            display: none;
-        }
-
-        canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-        }
-    </style>
-    <script
-    type="module"
-    src="https://unpkg.com/esp-web-tools@9/dist/web/install-button.js?module"
-  ></script>
+    .firmware-container select {
+      width: 100%;
+      padding: 6px;
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      border-radius: 3px;
+    }
+    
+  </style>
+<script type="module" src="https://unpkg.com/esp-web-tools@latest/dist/web/install-button.js?module"></script>
 </head>
 <body>
-    <canvas id="particleCanvas" style="background: rgb(182, 63, 63);"></canvas>
-    <div id="cubecontainer" class="cube-container">
-        <img src="Images/Universal.png" alt="BLLED Logo">
-        <div style="padding: 16px">BLLED Controller</div>
-        <esp-web-install-button
-            manifest="https://raw.githubusercontent.com/DutchDevelop/BLLEDController/main/firmware/manifest.json">
-        </esp-web-install-button>
-        <br>
-        <div style="padding: 16px">BLSmartFlow</div>
-        <esp-web-install-button
-            manifest="https://raw.githubusercontent.com/DutchDevelop/BLSmartFlow/refs/heads/main/firmware/manifest.json">
-        </esp-web-install-button>
-        <button id="connectbutton">Connect</button>
+  <div class="cube-container" id="cubeContainer">
+    <img src="Images/Universal.png" alt="Universal Logo" class="logo" />
+    <h1>Universal Flasher</h1>
+    <p class="subtext">Choose your platform</p>
+    <div class="button-row">
+      <button class="printer-button" onclick="handlePrinterClick('Bambulab')">
+        <img src="Images/Bambu.png" alt="Bambulab" />
+        <span>Bambulab</span>
+      </button>
+      <button class="printer-button" onclick="handlePrinterClick('Prusa')">
+        <img src="Images/Prusa.png" alt="Prusa" />
+        <span>Prusa</span>
+      </button>
+      <button class="printer-button" onclick="handlePrinterClick('Klipper')">
+        <img src="Images/Klipper.png" alt="Klipper" />
+        <span>Klipper</span>
+      </button>
     </div>
+  </div>
 
-    <div id = "BLLEDForm" class='BLLEDform-container'>
-        <h1>BLLEDController WIFI Setup Page</h1>
-        <p>
-            This page allows you to set up your BLLEDController's WIFI By entering your WIFI details.
-        </p>   
-        <label for="ssid">SSID:</label>
-        <input type="text" id="ssid" placeholder="Enter SSID"><br>
-    
-        <label for="password">Password:</label>
-        <input type="password" id="password" placeholder="Enter Password"><br>
+  <div id="firmwareContainer" class="firmware-container" style="display: none;">
+  <img id="firmwareLogo" src="" alt="Device Logo" />
+  <div class="form-container">
+    <p>Select a firmware version below and click Connect to flash your device.</p>
 
-        <label for='ip'>Printer IP:</label>
-        <input type='text' id='ip' title='Enter the IP address of your MQTT broker' placeholder="Enter Printer IP"><br>
+    <label for="firmwareSelect">Firmware Version</label>
+    <select id="firmwareSelect">
+      <option value="">Select Version</option>
+    </select>
 
-        <label for='code'>Printer Access Code:</label>
-        <input type='text' id='code' title='Enter the access code for your MQTT broker' placeholder="Enter Printer Access Code"><br>
+    <esp-web-install-button id="flashButton" manifest="" disabled></esp-web-install-button>
 
-        <label for='id'>Printer Serial ID:</label>
-        <input type='text' id='id' title='Enter the serial ID for your device' placeholder="Enter Printer Serial ID"><br>
-    
-        <button id="sendButton">Send Configuration</button>
-        <div id="status"></div>
-        <div id="logContainer" style="margin-top: 20px; border: 1px solid #ccc; padding: 10px; max-height: 200px; overflow-y: auto;"></div>
-    </div>
+    <p id="status"></p>
+  </div>
 
+  <button id="firmwareBackButton" style="margin-top: 20px; padding: 10px 20px; border: none; border-radius: 5px; background-color: #ccc; cursor: pointer;">Back</button>
+</div>
+
+
+    <div id="platformItems" class="platform-items" style="display: none;"></div>
     <script>
-        let port;
-        async function displayloginsetup(){
-            console.log('connection function')
+        function tweenBackgroundColor(canvas, startRGB, endRGB, duration = 1000) {
+            const startTime = performance.now();
 
-            port = await navigator.serial.requestPort();
-            if (port && !port.readable) {
-                await port.open({ baudRate: 115200 });
-            }
-            const container = document.getElementById('BLLEDForm');
-            if (container) {
-                container.style.display = "flex";
-            }
+            function animate(time) {
+                const elapsed = time - startTime;
+                const progress = Math.min(elapsed / duration, 1);
 
-            const cube = document.getElementById('cubecontainer');
-            if (cube) {
-                cube.style.display = "none";
-            }
+                const currentRGB = {
+                r: Math.round(startRGB.r + (endRGB.r - startRGB.r) * progress),
+                g: Math.round(startRGB.g + (endRGB.g - startRGB.g) * progress),
+                b: Math.round(startRGB.b + (endRGB.b - startRGB.b) * progress)
+                };
 
-            const logContainer = document.getElementById("logContainer");
-            logContainer.innerHTML += `<p>Connected</p>`;
-            logContainer.scrollTop = logContainer.scrollHeight;
+                canvas.style.backgroundColor = `rgb(${currentRGB.r}, ${currentRGB.g}, ${currentRGB.b})`;
 
-            const decoder = new TextDecoderStream();
-            
-            console.log(port);
-
-            port.readable.pipeTo(decoder.writable);
-
-            const inputStream = decoder.readable;
-            const reader = inputStream.getReader();
-            let accumulatedData = '';
-
-            while (true) {
-                const { value, done } = await reader.read();
-                if (done) {
-                    console.log("[readLoop] DONE", done);
-                    reader.releaseLock();
-                    break;
-                }
-                if (value) {
-                    accumulatedData += value;
-                    if (value.includes('\n')|| value.includes('\r')|| value.includes('\f')) {
-                        if (accumulatedData.includes("IP_ADDRESS:")) {
-                            const startIndex = accumulatedData.indexOf("IP_ADDRESS:") + "IP_ADDRESS:".length;
-                            const ipAddress = accumulatedData.substring(startIndex).trim();
-                            document.getElementById("status").innerHTML = `Successfully connected to wifi. <span style="color:MediumSeaGreen;"><B>Head over to the <A HREF="http://${ipAddress}/">BLLED Conntroller Setup Page</A> to customise your settings</B></span><BR>`;
-                            document.getElementById("status").innerHTML += `BLLED Controller Setup page address: <A HREF="http://${ipAddress}/">http://${ipAddress}/</A>`;
-                            accumulatedData = '';
-                            break;
-                        }else{
-                            const logContainer = document.getElementById("logContainer");
-                            
-                            logContainer.innerHTML += `${accumulatedData.substring(0, accumulatedData.indexOf("\n"))}<BR>`;
-                                logContainer.innerHTML += `${accumulatedData.substring(accumulatedData.indexOf("\n"),accumulatedData.length)}`;
-                            logContainer.scrollTop = logContainer.scrollHeight;
-                            accumulatedData = '';
-                        }
-                        
-                    }
+                if (progress < 1) {
+                requestAnimationFrame(animate);
                 }
             }
-        }
 
-        let interval;
-        function handleElementInsertion(mutationsList, observer) {
-          for (const mutation of mutationsList) {
-            if (mutation.type === "childList") {
-              for (const node of mutation.addedNodes) {
-                if (node.nodeType === Node.ELEMENT_NODE) {
-                  if (node.tagName === "EWT-INSTALL-DIALOG") {
-                    node.addEventListener("closed", (e) => {
-                      console.log("Install window was closed");
-                    });
-                    interval = setInterval(() => {
-                      if (
-                        node.___installState &&
-                        node.___installState.state === "finished"
-                      ) {
-                        clearInterval(interval);
-                        console.log("Finished");
-                        
-                        window.location.replace('./setup.html');
-                      }
-                    }, 250);
-                  }
-                }
-              }
-            }
-          }
-        }
-        new MutationObserver(handleElementInsertion).observe(document.body, {
-          childList: true,
-          subtree: true,
-        });
-
-        async function sendCredentials() {
-            const ssid = document.getElementById("ssid").value;
-            const pass = document.getElementById("password").value;
-
-            const printerip = document.getElementById("ip").value;
-            const printercode = document.getElementById("code").value;
-            const printerserial = document.getElementById("id").value;
-  
-            const data = {
-              ssid,
-              pass,
-              printerip,
-              printercode,
-              printerserial
-            };
-  
-            const textEncoder = new TextEncoderStream();
-            const writableStreamClosed = textEncoder.readable.pipeTo(
-              port.writable
-            );
-  
-            const writer = textEncoder.writable.getWriter();
-  
-            await writer.write(JSON.stringify(data) + "\n");
-  
-            writer.releaseLock();
-  
-            document.getElementById("status").innerText = "Credentials sent to Controller";
-          }
-  
-          function writeToSerial(data) {
-            if (!port) {
-              console.error("Serial port is not open");
-              return;
-            }
-            port.write(new TextEncoder().encode(data));
-          }
-  
-        document.getElementById("connectbutton").addEventListener("click", displayloginsetup);
-        document.getElementById("sendButton").addEventListener("click", sendCredentials);
-    </script>
-
-    <script>
-        const canvas = document.getElementById('particleCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let particlesArray = [];
-        const numberOfParticles = 100;
-
-        class Particle {
-            constructor(x, y, directionX, directionY, size, color) {
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.color = color;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = this.color;
-                ctx.fill();
-            }
-
-
-            update() {
-                if (this.x + this.size > canvas.width || this.x - this.size < 0) {
-                    this.directionX = -this.directionX;
-                }
-
-                if (this.y + this.size > canvas.height || this.y - this.size < 0) {
-                    this.directionY = -this.directionY;
-                }
-
-                this.x += this.directionX;
-                this.y += this.directionY;
-
-                this.draw();
-            }
-        }
-
-        function init() {
-            particlesArray = [];
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = Math.random() * 5 + 1;
-                let x = Math.random() * (canvas.width - size * 2) + size;
-                let y = Math.random() * (canvas.height - size * 2) + size;
-                let directionX = (Math.random() * 0.5) - 0.25;
-                let directionY = (Math.random() * 0.5) - 0.25;
-                let color = 'rgba(255, 255, 255, 0.8)';
-
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
-            }
-        }
-
-        function connect() {
-            let opacityValue = 1;
-            for (let a = 0; a < particlesArray.length; a++) {
-                for (let b = a; b < particlesArray.length; b++) {
-                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x)) 
-                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
-
-                    if (distance < (canvas.width / 7) * (canvas.height / 7)) {
-                        opacityValue = 1 - (distance / 20000);
-                        ctx.strokeStyle = 'rgba(255, 255, 255,' + opacityValue + ')';
-                        ctx.lineWidth = 1;
-                        ctx.beginPath();
-                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
-                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
-                        ctx.stroke();
-                    }
-                }
-            }
-        }
-
-        function animate() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-            for (let i = 0; i < particlesArray.length; i++) {
-                particlesArray[i].update();
-            }
-
-            connect();
             requestAnimationFrame(animate);
         }
 
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-            init();
-        });
+        function parseRGB(rgbStr) {
+            const [r, g, b] = rgbStr.match(/\d+/g).map(Number);
+            return { r, g, b };
+        }
 
-        init();
-        animate();
+
+        const backgroundColors = {
+            Bambulab: { r: 0, g: 174, b: 66 },     // Green
+            Prusa:    { r: 235, g: 111, b: 64 },     // Orange
+            Klipper:  { r: 78, g: 87, b: 138 }     // Blue
+        };
+
+        const platformItemsData = {
+            Bambulab: [
+            { name: "BLLED", img: "Images/BLLED.png" },
+            { name: "BLSmartflow", img: "Images/BLSmartflow.png" }
+            ],
+            Prusa: [],
+            Klipper: []
+        };
+
+        async function showFirmwareUI(item) {
+            const platformItems = document.getElementById('platformItems');
+            const firmwareContainer = document.getElementById('firmwareContainer');
+            const logo = document.getElementById('firmwareLogo');
+            const select = document.getElementById('firmwareSelect');
+            const flashBtn = document.getElementById('flashButton');
+            const status = document.getElementById('status');
+
+            platformItems.style.display = 'none';
+            firmwareContainer.style.display = 'flex';
+
+            logo.src = item.img;
+            logo.alt = item.name;
+            select.innerHTML = '<option value="">Please select</option>';
+            flashBtn.setAttribute('disabled', '');
+            flashBtn.setAttribute('manifest', '');
+            status.textContent = '';
+
+            try {
+                const response = await fetch(`firmware/${item.name}/firmware.json`);
+                if (!response.ok) throw new Error(`Failed to load firmware.json for ${item.name}`);
+
+                const firmwares = await response.json();
+                if (!Array.isArray(firmwares)) throw new Error("Invalid JSON structure");
+
+                firmwares.sort((a, b) =>
+                    b.version.localeCompare(a.version, undefined, { numeric: true, sensitivity: 'base' })
+                );
+
+                for (const fw of firmwares) {
+                    const opt = document.createElement("option");
+                    const label = `${fw.version}${fw.prerelease ? " (pre)" : ""}`;
+                    opt.value = fw.file;
+                    opt.textContent = label;
+                    select.appendChild(opt);
+                }
+
+                select.addEventListener('change', () => {
+
+                    if (select.value) {
+                        flashBtn.removeAttribute('disabled');
+                        flashBtn.setAttribute('manifest', `firmware/${item.name}/${select.value}`);
+                        status.textContent = `Ready to flash ${item.name} with ${select.options[select.selectedIndex].text}`;
+                    } else {
+                        flashBtn.setAttribute('disabled', '');
+                        flashBtn.setAttribute('manifest', '');
+                        status.textContent = '';
+                    }
+            });
+
+            } catch (err) {
+                console.error(err);
+                status.textContent = `Error loading firmware list: ${err.message}`;
+            }
+        }
+
+
+
+        function handlePrinterClick(platform) {
+            console.log(`${platform} button clicked`);
+            
+            const canvas = document.getElementById('particleCanvas');
+            const cube = document.getElementById('cubeContainer');
+            const container = document.getElementById('platformItems');
+
+            cube.style.display = 'none';
+            container.style.display = 'flex'; 
+
+            container.innerHTML = '';
+
+            const items = platformItemsData[platform] || [];
+            
+            const title = document.createElement('h2');
+            title.textContent = `${platform} Devices`;
+            title.style.marginBottom = '15px';
+            container.appendChild(title);
+
+            if (items.length === 0) {
+                const msg = document.createElement('p');
+                msg.textContent = `No items available for ${platform} yet.`;
+                msg.style.color = 'gray';
+                container.appendChild(msg);
+            }else{
+                const row = document.createElement('div');
+                row.className = 'items-row';
+
+                items.forEach(item => {
+                    const wrapper = document.createElement('div');
+                    wrapper.className = 'item';
+
+                    const img = document.createElement('img');
+                    img.src = item.img;
+                    img.alt = item.name;
+
+                    const label = document.createElement('span');
+                    label.textContent = item.name;
+
+                    wrapper.appendChild(img);
+                    wrapper.appendChild(label);
+                    row.appendChild(wrapper);
+
+                    wrapper.onclick = () => {
+                        showFirmwareUI(item);
+                    };
+                });
+
+                container.appendChild(row);
+            }
+
+            const backBtn = document.createElement('button');
+            backBtn.textContent = 'Back';
+            backBtn.style.marginTop = '20px';
+            backBtn.style.padding = '10px 20px';
+            backBtn.style.border = 'none';
+            backBtn.style.borderRadius = '5px';
+            backBtn.style.backgroundColor = '#ccc';
+            backBtn.style.cursor = 'pointer';
+            backBtn.onclick = () => {
+                container.style.display = 'none';
+                cube.style.display = 'flex';
+
+                const targetRGB = { r: 182, g: 63, b: 63 };
+                const currentStyle = getComputedStyle(canvas).backgroundColor;
+                const currentRGB = parseRGB(currentStyle);
+                tweenBackgroundColor(canvas, currentRGB, targetRGB, 400);
+            };
+
+            container.appendChild(backBtn);
+
+            const targetRGB = backgroundColors[platform] || { r: 182, g: 63, b: 63 };
+            const currentStyle = getComputedStyle(canvas).backgroundColor;
+            const currentRGB = parseRGB(currentStyle);
+            tweenBackgroundColor(canvas, currentRGB, targetRGB, 400);
+        }
+        document.getElementById('firmwareBackButton').addEventListener('click', () => {
+            document.getElementById('firmwareContainer').style.display = 'none';
+            document.getElementById('platformItems').style.display = 'flex';
+        });
     </script>
+
+
+
+  <canvas id="particleCanvas" style="background: rgb(182, 63, 63);"></canvas>
+  <script src="particleCanvas.js"></script>
 </body>
 </html>
