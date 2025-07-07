@@ -20,6 +20,14 @@
       box-sizing: border-box;
     }
 
+    ewt-no-port-picked-dialog{
+        z-index: 10;
+    }
+
+    ewt-install-dialog{
+        z-index: 10;
+    }
+
     body {
       height: 100vh;
       display: flex;
@@ -205,7 +213,8 @@
     }
     
   </style>
-<script type="module" src="https://unpkg.com/esp-web-tools@latest/dist/web/install-button.js?module"></script>
+<!-- <script type="module" src="https://unpkg.com/esp-web-tools@latest/dist/web/install-button.js?module"></script> -->
+  <script type="module" src="https://unpkg.com/esp-web-tools@9/dist/web/install-button.js?module"></script>
 </head>
 <body>
   <div class="cube-container" id="cubeContainer">
@@ -249,6 +258,14 @@
 
     <div id="platformItems" class="platform-items" style="display: none;"></div>
     <script>
+        let selectedPlatform = null;
+
+        const platformSetupPages = {
+          Bambulab: "setup/bambusetup.html",
+          Prusa: "setup/prusasetup.html",
+          Klipper: "setup/klippersetup.html"
+        };
+
         function tweenBackgroundColor(canvas, startRGB, endRGB, duration = 1000) {
             const startTime = performance.now();
 
@@ -300,6 +317,8 @@
             const select = document.getElementById('firmwareSelect');
             const flashBtn = document.getElementById('flashButton');
             const status = document.getElementById('status');
+            const basePath = window.location.pathname.replace(/\/[^/]*$/, '');
+            const manifestBase = window.location.origin + basePath + "/firmware/";
 
             platformItems.style.display = 'none';
             firmwareContainer.style.display = 'flex';
@@ -331,10 +350,11 @@
                 }
 
                 select.addEventListener('change', () => {
-
-                    if (select.value) {
+                    const selected = select.value;
+                    if (selected) {
                         flashBtn.removeAttribute('disabled');
-                        flashBtn.setAttribute('manifest', `firmware/${item.name}/${select.value}`);
+                        flashBtn.setAttribute('manifest', manifestBase + `/${item.name}/${selected.replace(/\.bin$/, ".json")}`);
+                        console.log(`firmware/${item.name}/${selected}`);
                         status.textContent = `Ready to flash ${item.name} with ${select.options[select.selectedIndex].text}`;
                     } else {
                         flashBtn.setAttribute('disabled', '');
@@ -353,7 +373,8 @@
 
         function handlePrinterClick(platform) {
             console.log(`${platform} button clicked`);
-            
+            selectedPlatform = platform; 
+
             const canvas = document.getElementById('particleCanvas');
             const cube = document.getElementById('cubeContainer');
             const container = document.getElementById('platformItems');
@@ -431,10 +452,39 @@
             document.getElementById('firmwareContainer').style.display = 'none';
             document.getElementById('platformItems').style.display = 'flex';
         });
+
+        let interval;
+        function handleElementInsertion(mutationsList, observer) {
+          for (const mutation of mutationsList) {
+            if (mutation.type === "childList") {
+              for (const node of mutation.addedNodes) {
+                if (node.nodeType === Node.ELEMENT_NODE) {
+                  if (node.tagName === "EWT-INSTALL-DIALOG") {
+                    node.addEventListener("closed", (e) => {
+                      console.log("Install window was closed");
+                    });
+                    interval = setInterval(() => {
+                      if (
+                        node.___installState &&
+                        node.___installState.state === "finished"
+                      ) {
+                        clearInterval(interval);
+                        console.log("Install window has Finished");
+                        const targetPage = platformSetupPages[selectedPlatform] || "setup.html";
+                        window.location.replace(targetPage);
+                      }
+                    }, 250);
+                  }
+                }
+              }
+            }
+          }
+        }
+        new MutationObserver(handleElementInsertion).observe(document.body, {
+          childList: true,
+          subtree: true,
+        });
     </script>
-
-
-
   <canvas id="particleCanvas" style="background: rgb(182, 63, 63);"></canvas>
   <script src="particleCanvas.js"></script>
 </body>
